@@ -1,0 +1,205 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/SaeMind/cms-mcp-server/schema/cms_data_schema.json",
+  "title": "CMS MCP Server — Data Schema",
+  "description": "JSON Schema definitions for all CMS dataset response types. Use for client-side response validation and API contract documentation.",
+
+  "definitions": {
+
+    "DataLineage": {
+      "type": "object",
+      "description": "Provenance metadata attached to every query result",
+      "required": ["source", "sourceUrl", "dataVersion", "lastUpdated", "retrievedAt", "cacheHit"],
+      "properties": {
+        "source": { "type": "string", "description": "Originating organization" },
+        "sourceUrl": { "type": "string", "format": "uri" },
+        "dataVersion": { "type": "string", "description": "Dataset version or publication date" },
+        "lastUpdated": { "type": "string", "format": "date" },
+        "retrievedAt": { "type": "string", "format": "date-time" },
+        "cacheHit": { "type": "boolean" },
+        "cacheTtlRemainingSeconds": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "QueryResultBase": {
+      "type": "object",
+      "required": ["requestId", "datasetId", "rowCount", "rows", "lineage"],
+      "properties": {
+        "requestId": { "type": "string", "format": "uuid" },
+        "datasetId": {
+          "type": "string",
+          "enum": ["hcc_risk_adjustment", "hospital_readmission", "mips_quality_measures", "partd_drug_utilization"]
+        },
+        "rowCount": { "type": "integer", "minimum": 0 },
+        "rows": { "type": "array" },
+        "lineage": { "$ref": "#/definitions/DataLineage" },
+        "warnings": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+
+    "HccRecord": {
+      "type": "object",
+      "description": "CMS-HCC V28 risk adjustment record",
+      "required": ["icdCode", "icdDescription", "hccCategory", "hccDescription", "relativeFactorDual", "relativeFactorNondual", "modelYear", "hierarchyGroup"],
+      "properties": {
+        "icdCode": {
+          "type": "string",
+          "pattern": "^[A-Z][0-9A-Z]{1,2}(\\.[0-9A-Z]{1,4})?$",
+          "description": "ICD-10-CM diagnosis code",
+          "examples": ["E11.9", "I50.9", "J44.1"]
+        },
+        "icdDescription": { "type": "string" },
+        "hccCategory": { "type": "integer", "minimum": 1, "maximum": 500 },
+        "hccDescription": { "type": "string" },
+        "relativeFactorDual": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20,
+          "description": "Risk relative factor for dual-eligible beneficiaries"
+        },
+        "relativeFactorNondual": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 20,
+          "description": "Risk relative factor for non-dual beneficiaries"
+        },
+        "modelYear": { "type": "integer", "minimum": 2019, "maximum": 2030 },
+        "hierarchyGroup": {
+          "type": "string",
+          "description": "Clinical hierarchy group",
+          "examples": ["Diabetes", "Cardiovascular", "Cancer", "Renal", "Neurological"]
+        }
+      }
+    },
+
+    "ReadmissionRecord": {
+      "type": "object",
+      "description": "Hospital 30-day readmission rate (HCUP AHRQ)",
+      "required": ["hospitalCcn", "hospitalName", "state", "measureId", "measureName", "denominator", "numerator", "readmissionRate", "nationalRate", "performanceCategory", "reportingPeriod"],
+      "properties": {
+        "hospitalCcn": { "type": "string", "pattern": "^\\d{6}$" },
+        "hospitalName": { "type": "string" },
+        "state": { "type": "string", "pattern": "^[A-Z]{2}$" },
+        "measureId": {
+          "type": "string",
+          "pattern": "^READM-\\d{2}-[A-Z0-9-]+$",
+          "examples": ["READM-30-AMI", "READM-30-HF", "READM-30-COPD", "READM-30-PN"]
+        },
+        "measureName": { "type": "string" },
+        "denominator": { "type": "integer", "minimum": 0 },
+        "numerator": { "type": "integer", "minimum": 0 },
+        "readmissionRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "nationalRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "performanceCategory": {
+          "type": "string",
+          "enum": ["better", "same", "worse", "not_available"]
+        },
+        "reportingPeriod": {
+          "type": "string",
+          "description": "ISO 8601 date interval",
+          "examples": ["2022-07-01/2023-06-30"]
+        }
+      }
+    },
+
+    "MipsRecord": {
+      "type": "object",
+      "description": "MIPS Quality Payment Program provider performance record",
+      "required": ["npi", "providerName", "specialty", "measureId", "measureName", "measureCategory", "denominator", "numerator", "performanceRate", "reportingYear", "measureType"],
+      "properties": {
+        "npi": { "type": "string", "pattern": "^\\d{10}$" },
+        "providerName": { "type": "string" },
+        "specialty": { "type": "string" },
+        "measureId": { "type": "string", "pattern": "^\\d{3}[A-Z]?$" },
+        "measureName": { "type": "string" },
+        "measureCategory": { "type": "string" },
+        "denominator": { "type": "integer", "minimum": 0 },
+        "numerator": { "type": "integer", "minimum": 0 },
+        "performanceRate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "reportingYear": { "type": "integer", "minimum": 2017, "maximum": 2030 },
+        "measureType": {
+          "type": "string",
+          "enum": ["process", "outcome", "patient_experience", "efficiency"]
+        }
+      }
+    },
+
+    "PartdRecord": {
+      "type": "object",
+      "description": "Medicare Part D drug utilization and cost record",
+      "required": ["drugName", "genericName", "brandName", "drugClass", "totalClaims", "totalBeneficiaries", "totalDayCoverage", "totalDrugCost", "avgCostPerClaim", "avgCostPerDay", "reportingYear", "state"],
+      "properties": {
+        "drugName": { "type": "string" },
+        "genericName": { "type": "string" },
+        "brandName": { "type": "string" },
+        "drugClass": { "type": "string" },
+        "totalClaims": { "type": "integer", "minimum": 0 },
+        "totalBeneficiaries": { "type": "integer", "minimum": 0 },
+        "totalDayCoverage": { "type": "integer", "minimum": 0 },
+        "totalDrugCost": { "type": "number", "minimum": 0 },
+        "avgCostPerClaim": { "type": "number", "minimum": 0 },
+        "avgCostPerDay": { "type": "number", "minimum": 0 },
+        "reportingYear": { "type": "integer", "minimum": 2010, "maximum": 2030 },
+        "state": { "type": "string", "pattern": "^[A-Z]{2}$" }
+      }
+    },
+
+    "ErrorResponse": {
+      "type": "object",
+      "description": "Structured error returned when a tool call fails",
+      "required": ["error"],
+      "properties": {
+        "error": { "type": "string" },
+        "requestId": { "type": "string", "format": "uuid" }
+      }
+    }
+  },
+
+  "type": "object",
+  "properties": {
+    "HccQueryResult": {
+      "allOf": [
+        { "$ref": "#/definitions/QueryResultBase" },
+        {
+          "properties": {
+            "datasetId": { "const": "hcc_risk_adjustment" },
+            "rows": { "type": "array", "items": { "$ref": "#/definitions/HccRecord" } }
+          }
+        }
+      ]
+    },
+    "ReadmissionQueryResult": {
+      "allOf": [
+        { "$ref": "#/definitions/QueryResultBase" },
+        {
+          "properties": {
+            "datasetId": { "const": "hospital_readmission" },
+            "rows": { "type": "array", "items": { "$ref": "#/definitions/ReadmissionRecord" } }
+          }
+        }
+      ]
+    },
+    "MipsQueryResult": {
+      "allOf": [
+        { "$ref": "#/definitions/QueryResultBase" },
+        {
+          "properties": {
+            "datasetId": { "const": "mips_quality_measures" },
+            "rows": { "type": "array", "items": { "$ref": "#/definitions/MipsRecord" } }
+          }
+        }
+      ]
+    },
+    "PartdQueryResult": {
+      "allOf": [
+        { "$ref": "#/definitions/QueryResultBase" },
+        {
+          "properties": {
+            "datasetId": { "const": "partd_drug_utilization" },
+            "rows": { "type": "array", "items": { "$ref": "#/definitions/PartdRecord" } }
+          }
+        }
+      ]
+    }
+  }
+}
