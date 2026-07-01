@@ -1,0 +1,6 @@
+hospitalCcn,hospitalName,state,measureId,measureName,denominator,numerator,readmissionRate,nationalRate,performanceCategory,reportingPeriod
+450289,Memorial Hermann Hospital,TX,READM-30-AMI,30-Day AMI Readmission Rate,423,58,0.137,0.152,better,2022-07-01/2023-06-30
+450289,Memorial Hermann Hospital,TX,READM-30-HF,30-Day Heart Failure Readmission Rate,892,192,0.215,0.221,same,2022-07-01/2023-06-30
+330101,NewYork-Presbyterian Hospital,NY,READM-30-COPD,30-Day COPD Readmission Rate,1204,238,0.198,0.204,same,2022-07-01/2023-06-30
+050376,Cedars-Sinai Medical Center,CA,READM-30-AMI,30-Day AMI Readmission Rate,567,72,0.127,0.152,better,2022-07-01/2023-06-30
+230038,University of Michigan Health,MI,READM-30-PN,30-Day Pneumonia Readmission Rate,789,142,0.18,0.172,worse,2022-07-01/2023-06-30

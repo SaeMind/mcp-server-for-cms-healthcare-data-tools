@@ -1,6 +1,5 @@
 node_modules/
 dist/
 .env
-outputs/audit.log
 outputs/*.log
 *.js.map

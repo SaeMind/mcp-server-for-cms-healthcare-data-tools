@@ -1,0 +1,5 @@
+npi,providerName,specialty,measureId,measureName,measureCategory,denominator,numerator,performanceRate,reportingYear,measureType
+1234567890,"Smith, John A",Internal Medicine,001,Diabetes: Hemoglobin A1c (HbA1c) Poor Control (>9%),Diabetes,145,22,0.152,2023,outcome
+1234567890,"Smith, John A",Internal Medicine,236,Controlling High Blood Pressure,Cardiovascular,312,267,0.856,2023,process
+9876543210,"Johnson, Maria L",Cardiology,005,Heart Failure: ACE Inhibitor or ARB Therapy,Heart Failure,203,197,0.97,2023,process
+5551234567,"Patel, Priya R",Pulmonology,052,Chronic Obstructive Pulmonary Disease: Inhaled Bronchodilator Therapy,Pulmonary,88,83,0.943,2023,process

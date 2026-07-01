@@ -1,0 +1,6 @@
+drugName,genericName,brandName,drugClass,totalClaims,totalBeneficiaries,totalDayCoverage,totalDrugCost,avgCostPerClaim,avgCostPerDay,reportingYear,state
+Metformin HCl,metformin hydrochloride,Glucophage,Biguanides (Antidiabetics),89234,67812,8921340,4123450,46.21,0.46,2022,TX
+Lisinopril,lisinopril,Prinivil/Zestril,ACE Inhibitors (Antihypertensives),112456,89234,11245600,5234780,46.54,0.47,2022,TX
+Atorvastatin Calcium,atorvastatin calcium,Lipitor,Statins (Lipid-Lowering),145678,112345,14567800,8923450,61.26,0.61,2022,CA
+Empagliflozin,empagliflozin,Jardiance,SGLT2 Inhibitors (Antidiabetics),23456,18234,2345600,85234560,3635.12,36.35,2022,TX
+Semaglutide,semaglutide,Ozempic,GLP-1 Agonists (Antidiabetics),45678,34512,4567800,234560000,5135.12,51.35,2022,CA
