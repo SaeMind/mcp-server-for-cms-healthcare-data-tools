@@ -28,7 +28,7 @@
 
 ### What Remains
 
-- [ ] Publish Tableau dashboard to Tableau Public and update README link
+- [x] Published Tableau dashboard: https://public.tableau.com/views/CMSMCPServer-ExecutiveDashboard/CMSMCPServerExecutiveDashboard
 - [ ] (Optional / Path B) Write ETL loader for real CMS data to populate `cms.hospital_readmission` table
 
 ### LinkedIn Results Clause

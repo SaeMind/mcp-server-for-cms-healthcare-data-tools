@@ -415,7 +415,7 @@ The Tableau dashboard included in this repository was built from the DEMO_MODE=t
 
 ## Tableau Dashboard
 
-**[CMS MCP Server — Executive Dashboard](https://public.tableau.com/PLACEHOLDER)** *(link will be updated after publish)*
+**[CMS MCP Server — Executive Dashboard](https://public.tableau.com/views/CMSMCPServer-ExecutiveDashboard/CMSMCPServerExecutiveDashboard)**
 
 Views included:
 - HCC risk factor distribution by disease hierarchy group
